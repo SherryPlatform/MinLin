@@ -16,7 +16,8 @@ sudo apt install --no-install-recommends \
     libssl-dev \
     libelf-dev \
     cpio \
-    libncurses-dev
+    libncurses-dev \
+    bc
 ```
 
 ## License
