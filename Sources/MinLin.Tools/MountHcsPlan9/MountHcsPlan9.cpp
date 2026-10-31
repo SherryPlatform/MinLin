@@ -165,13 +165,11 @@ static int MountHcsPlan9(
     return ErrorCode ? ::ReportError(Operation, ErrorCode) : 0;
 }
 
-int main(
-    _Mo_In_ int ArgumentCount,
-    _Mo_In_ MO_STRING Arguments[])
+int main(int argc, char* argv[])
 {
-    if (2 == ArgumentCount &&
-        (0 == ::strcmp(Arguments[1], "-h") ||
-        0 == ::strcmp(Arguments[1], "--help")))
+    if (2 == argc &&
+        (0 == ::strcmp(argv[1], "-h") ||
+        0 == ::strcmp(argv[1], "--help")))
     {
         ::PrintUsage(stdout);
         return 0;
@@ -179,25 +177,25 @@ int main(
 
     int FirstArgument = 1;
     bool ReadOnly = false;
-    if (FirstArgument < ArgumentCount &&
-        (0 == ::strcmp(Arguments[FirstArgument], "-r") ||
-        0 == ::strcmp(Arguments[FirstArgument], "--read-only")))
+    if (FirstArgument < argc &&
+        (0 == ::strcmp(argv[FirstArgument], "-r") ||
+        0 == ::strcmp(argv[FirstArgument], "--read-only")))
     {
         ReadOnly = true;
         ++FirstArgument;
     }
-    if (FirstArgument < ArgumentCount &&
-        0 == ::strcmp(Arguments[FirstArgument], "--"))
+    if (FirstArgument < argc &&
+        0 == ::strcmp(argv[FirstArgument], "--"))
     {
         ++FirstArgument;
     }
-    if (3 != ArgumentCount - FirstArgument)
+    if (3 != argc - FirstArgument)
     {
         ::PrintUsage(stderr);
         return 2;
     }
 
-    MO_CONSTANT_STRING PortText = Arguments[FirstArgument];
+    MO_CONSTANT_STRING PortText = argv[FirstArgument];
     MO_STRING PortEnd = nullptr;
     errno = 0;
     unsigned long PortNumber = ::strtoul(PortText, &PortEnd, 10);
@@ -212,7 +210,7 @@ int main(
         return 2;
     }
 
-    MO_CONSTANT_STRING AccessName = Arguments[FirstArgument + 1];
+    MO_CONSTANT_STRING AccessName = argv[FirstArgument + 1];
     size_t AccessNameLength = ::strnlen(
         AccessName,
         g_MaximumAccessNameLength + 1);
@@ -226,7 +224,7 @@ int main(
         return 2;
     }
 
-    MO_CONSTANT_STRING MountPoint = Arguments[FirstArgument + 2];
+    MO_CONSTANT_STRING MountPoint = argv[FirstArgument + 2];
     if (!MountPoint[0])
     {
         ::fprintf(stderr, "mounthcs9p: MountPoint must not be empty.\n");

@@ -584,29 +584,27 @@ void SynthRdpRedirectionWorker(
     }
 }
 
-int main(
-    _Mo_In_ int ArgumentCount,
-    _Mo_In_ MO_STRING Arguments[])
+int main(int argc, char* argv[])
 {
     ::setbuf(stdout, nullptr);
 
-    MO_CONSTANT_STRING ServerHost = ArgumentCount > 1
-        ? Arguments[1]
+    MO_CONSTANT_STRING ServerHost = argc > 1
+        ? argv[1]
         : "127.0.0.1";
-    MO_CONSTANT_STRING ServerPort = ArgumentCount > 2
-        ? Arguments[2]
+    MO_CONSTANT_STRING ServerPort = argc > 2
+        ? argv[2]
         : "3389";
     // Validate configuration before opening any VMBus channel.
     {
         bool ShowHelp =
-            2 == ArgumentCount &&
+            2 == argc &&
             (0 == ::strcmp(ServerHost, "--help") ||
             0 == ::strcmp(ServerHost, "-h"));
-        if (ShowHelp || ArgumentCount > 3)
+        if (ShowHelp || argc > 3)
         {
             if (!ShowHelp)
             {
-                ::printf("[Error] Arguments Invalid.\n");
+                ::printf("[Error] argv Invalid.\n");
             }
             ::printf(
                 "Usage: SynthRdp [ServerHost [ServerPort]]\n"
