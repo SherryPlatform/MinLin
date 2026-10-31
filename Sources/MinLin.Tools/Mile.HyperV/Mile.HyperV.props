@@ -11,6 +11,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <IncludePath>$(MSBuildThisFileDirectory);$(IncludePath)</IncludePath>
+    <AdditionalSourcesToCopyMapping>$(MSBuildThisFileDirectory):=$(RemoteRootDir)/Mile.HyperV;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

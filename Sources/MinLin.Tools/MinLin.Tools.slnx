@@ -1,4 +1,8 @@
 <Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+  </Configurations>
   <Folder Name="/Mile.HyperV/">
     <File Path="Mile.HyperV/Mile.HyperV.Guest.Interface.h" />
     <File Path="Mile.HyperV/Mile.HyperV.Guest.Protocols.h" />
@@ -15,4 +19,7 @@
     <File Path="Mile.Mobility/Mile.Mobility.Utilities.MemoryAccess.c" />
     <File Path="Mile.Mobility/Mile.Mobility.Utilities.MemoryAccess.h" />
   </Folder>
+  <Project Path="SynthRdp/SynthRdp.vcxproj" Id="afcd6d51-7b08-46b7-95de-8c2d33a48645">
+    <Deploy />
+  </Project>
 </Solution>
