@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Sdk="Mile.Project.Configurations" Project="Mile.Project.Platform.x64.props" />
+  <Import Sdk="Mile.Project.Configurations" Project="Mile.Project.Platform.ARM64.props" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F3F12B45-EB0C-40D5-AAD1-ACACFE931EFD}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>MountHcsPlan9</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{D51BCBC9-82E9-4017-911E-C93873C4EA2B}</LinuxProjectType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <TargetName>mounthcs9p</TargetName>
+    <TargetExt />
+    <RemoteOutRelDir>Output/Binaries/$(Configuration)/$(Platform)</RemoteOutRelDir>
+    <RemoteIntRelDir>Output/Objects/$(Configuration)/$(MSBuildProjectName)/$(Platform)</RemoteIntRelDir>
+    <RemoteDeployDir>$(RemoteRootDir)</RemoteDeployDir>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\Mile.Mobility\Mile.Mobility.props" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalWarnings Condition="'$(PlatformToolset)'=='Remote_GCC_1_0'">no-multichar;</AdditionalWarnings>
+      <AdditionalWarnings Condition="'$(PlatformToolset)'=='Remote_Clang_1_0'">no-vla-extension-static-assert;no-gnu-folding-constant;</AdditionalWarnings>
+      <CAdditionalWarning>%(AdditionalWarnings);%(CAdditionalWarning)</CAdditionalWarning>
+      <CppAdditionalWarning>%(AdditionalWarnings);%(CppAdditionalWarning)</CppAdditionalWarning>
+      <CppLanguageStandard>c++20</CppLanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="MountHcsPlan9.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

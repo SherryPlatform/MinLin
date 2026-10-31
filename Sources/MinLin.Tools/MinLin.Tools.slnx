@@ -19,6 +19,9 @@
     <File Path="Mile.Mobility/Mile.Mobility.Utilities.MemoryAccess.c" />
     <File Path="Mile.Mobility/Mile.Mobility.Utilities.MemoryAccess.h" />
   </Folder>
+  <Project Path="MountHcsPlan9/MountHcsPlan9.vcxproj" Id="f3f12b45-eb0c-40d5-aad1-acacfe931efd">
+    <Deploy />
+  </Project>
   <Project Path="SynthRdp/SynthRdp.vcxproj" Id="afcd6d51-7b08-46b7-95de-8c2d33a48645">
     <Deploy />
   </Project>
