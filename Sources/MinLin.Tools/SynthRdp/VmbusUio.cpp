@@ -41,7 +41,7 @@ typedef struct _VMBUS_UIO_CONTEXT
     int TerminalError;
 } VMBUS_UIO_CONTEXT, *PVMBUS_UIO_CONTEXT;
 
-MO_EXTERN_C MO_BOOL VmbusUioClose(
+MO_EXTERN_C MO_BOOL MOAPI VmbusUioClose(
     _Mo_In_ VMBUS_UIO_HANDLE Handle)
 {
     if (!Handle)
@@ -923,7 +923,7 @@ static int VmbusUioSignal(_Mo_InOut_ VMBUS_UIO_CONTEXT& Device)
     return -1;
 }
 
-MO_EXTERN_C MO_INTN VmbusUioRead(
+MO_EXTERN_C MO_INTN MOAPI VmbusUioRead(
     _Mo_In_ VMBUS_UIO_HANDLE Handle,
     _Mo_Out_ MO_POINTER Buffer,
     _Mo_In_ MO_UINTN Size)
@@ -1062,7 +1062,7 @@ MO_EXTERN_C MO_INTN VmbusUioRead(
     return static_cast<MO_INTN>(PayloadSize);
 }
 
-MO_EXTERN_C MO_INTN VmbusUioWrite(
+MO_EXTERN_C MO_INTN MOAPI VmbusUioWrite(
     _Mo_In_ VMBUS_UIO_HANDLE Handle,
     _Mo_In_ MO_CONSTANT_POINTER Buffer,
     _Mo_In_ MO_UINTN Size)

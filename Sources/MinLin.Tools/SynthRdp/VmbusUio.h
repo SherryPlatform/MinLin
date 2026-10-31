@@ -24,7 +24,7 @@ MO_DECLARE_HANDLE(VMBUS_UIO_HANDLE);
  * @return MO_TRUE on success; otherwise MO_FALSE with errno set to the first
  *         cleanup error. A null handle sets errno to EBADF.
 */
-MO_EXTERN_C MO_BOOL VmbusUioClose(
+MO_EXTERN_C MO_BOOL MOAPI VmbusUioClose(
     _Mo_In_ VMBUS_UIO_HANDLE Handle);
 
 /**
@@ -65,7 +65,7 @@ MO_EXTERN_C VMBUS_UIO_HANDLE MOAPI VmbusUioOpen(
  *         EAGAIN is retryable; ENOBUFS preserves the packet. Failure after
  *         publishing the read index is terminal and may follow consumption.
 */
-MO_EXTERN_C MO_INTN VmbusUioRead(
+MO_EXTERN_C MO_INTN MOAPI VmbusUioRead(
     _Mo_In_ VMBUS_UIO_HANDLE Handle,
     _Mo_Out_ MO_POINTER Buffer,
     _Mo_In_ MO_UINTN Size);
@@ -82,7 +82,7 @@ MO_EXTERN_C MO_INTN VmbusUioRead(
  *         packet unpublished; EMSGSIZE indicates an oversized payload.
  *         Failure after publication is terminal; never replay that payload.
 */
-MO_EXTERN_C MO_INTN VmbusUioWrite(
+MO_EXTERN_C MO_INTN MOAPI VmbusUioWrite(
     _Mo_In_ VMBUS_UIO_HANDLE Handle,
     _Mo_In_ MO_CONSTANT_POINTER Buffer,
     _Mo_In_ MO_UINTN Size);
