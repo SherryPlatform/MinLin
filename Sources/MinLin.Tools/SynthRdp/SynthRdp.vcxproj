@@ -37,9 +37,11 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="VmbusPipe.cpp" />
     <ClCompile Include="VmbusUio.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="VmbusPipe.h" />
     <ClInclude Include="VmbusUio.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
