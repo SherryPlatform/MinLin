@@ -1,1 +1,10 @@
-﻿<Solution />
+﻿<Solution>
+  <Folder Name="/Mile.Mobility/">
+    <File Path="Mile.Mobility/Mile.Mobility.Portable.Types.h" />
+    <File Path="Mile.Mobility/Mile.Mobility.props" />
+    <File Path="Mile.Mobility/Mile.Mobility.Utilities.FixedInteger.c" />
+    <File Path="Mile.Mobility/Mile.Mobility.Utilities.FixedInteger.h" />
+    <File Path="Mile.Mobility/Mile.Mobility.Utilities.MemoryAccess.c" />
+    <File Path="Mile.Mobility/Mile.Mobility.Utilities.MemoryAccess.h" />
+  </Folder>
+</Solution>
