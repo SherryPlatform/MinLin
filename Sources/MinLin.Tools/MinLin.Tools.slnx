@@ -1,4 +1,12 @@
-﻿<Solution>
+<Solution>
+  <Folder Name="/Mile.HyperV/">
+    <File Path="Mile.HyperV/Mile.HyperV.Guest.Interface.h" />
+    <File Path="Mile.HyperV/Mile.HyperV.Guest.Protocols.h" />
+    <File Path="Mile.HyperV/Mile.HyperV.Portable.Types.h" />
+    <File Path="Mile.HyperV/Mile.HyperV.props" />
+    <File Path="Mile.HyperV/Mile.HyperV.TLFS.h" />
+    <File Path="Mile.HyperV/Mile.HyperV.VMBus.h" />
+  </Folder>
   <Folder Name="/Mile.Mobility/">
     <File Path="Mile.Mobility/Mile.Mobility.Portable.Types.h" />
     <File Path="Mile.Mobility/Mile.Mobility.props" />
