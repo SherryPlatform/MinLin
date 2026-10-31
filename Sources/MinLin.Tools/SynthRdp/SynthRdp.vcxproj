@@ -37,6 +37,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SynthRdp.cpp" />
     <ClCompile Include="VmbusPipe.cpp" />
     <ClCompile Include="VmbusUio.cpp" />
   </ItemGroup>
