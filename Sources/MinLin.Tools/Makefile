@@ -14,7 +14,7 @@
 TOOLS_DIRECTORY := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 
 # Add project directories here as they gain their own Makefiles.
-PROJECTS ?= SynthRdp
+PROJECTS ?= SynthRdp MountHcsPlan9
 CLEAN_PROJECTS := $(addprefix clean-,$(PROJECTS))
 
 .PHONY: all clean $(PROJECTS) $(CLEAN_PROJECTS)
