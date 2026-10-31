@@ -36,5 +36,11 @@
       <CppLanguageStandard>c++20</CppLanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="VmbusUio.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VmbusUio.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
