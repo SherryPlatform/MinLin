@@ -90,7 +90,7 @@
 #endif /* !nullptr */
 #endif
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) /* MSVC */
 typedef signed char MO_INT8, *PMO_INT8;
 typedef signed short MO_INT16, *PMO_INT16;
 typedef signed int MO_INT32, *PMO_INT32;
@@ -100,7 +100,7 @@ typedef unsigned char MO_UINT8, *PMO_UINT8;
 typedef unsigned short MO_UINT16, *PMO_UINT16;
 typedef unsigned int MO_UINT32, *PMO_UINT32;
 typedef unsigned __int64 MO_UINT64, *PMO_UINT64;
-#else
+#elif defined(__GNUC__) || defined(__clang__) /* GCC and Clang */
 typedef signed char MO_INT8, *PMO_INT8;
 typedef signed short MO_INT16, *PMO_INT16;
 typedef signed int MO_INT32, *PMO_INT32;
@@ -110,22 +110,42 @@ typedef unsigned char MO_UINT8, *PMO_UINT8;
 typedef unsigned short MO_UINT16, *PMO_UINT16;
 typedef unsigned int MO_UINT32, *PMO_UINT32;
 typedef unsigned long long MO_UINT64, *PMO_UINT64;
+#else /* Unknown Compilers */
+#ifndef MILE_MOBILITY_UNKNOWN_COMPILER_ADAPTED
+#error "[MILE_MOBILITY_UNKNOWN_COMPILER_ADAPTED] Compiler adaptation required."
+#endif /* !MILE_MOBILITY_UNKNOWN_COMPILER_ADAPTED */
 #endif
 
+#ifndef MO_INT8_MAX
 #define MO_INT8_MAX 0x7F
+#endif /* !MO_INT8_MAX */
+#ifndef MO_INT16_MAX
 #define MO_INT16_MAX 0x7FFF
+#endif /* !MO_INT16_MAX */
+#ifndef MO_INT32_MAX
 #define MO_INT32_MAX 0x7FFFFFFF
+#endif /* !MO_INT32_MAX */
+#ifndef MO_INT64_MAX
 #define MO_INT64_MAX 0x7FFFFFFFFFFFFFFFLL
+#endif /* !MO_INT64_MAX */
 
 #define MO_INT8_MIN (-MO_INT8_MAX - 1)
 #define MO_INT16_MIN (-MO_INT16_MAX - 1)
 #define MO_INT32_MIN (-MO_INT32_MAX - 1)
 #define MO_INT64_MIN (-MO_INT64_MAX - 1)
 
+#ifndef MO_UINT8_MAX
 #define MO_UINT8_MAX 0xFFU
+#endif /* !MO_UINT8_MAX */
+#ifndef MO_UINT16_MAX
 #define MO_UINT16_MAX 0xFFFFU
+#endif /* !MO_UINT16_MAX */
+#ifndef MO_UINT32_MAX
 #define MO_UINT32_MAX 0xFFFFFFFFU
+#endif /* !MO_UINT32_MAX */
+#ifndef MO_UINT64_MAX
 #define MO_UINT64_MAX 0xFFFFFFFFFFFFFFFFULL
+#endif /* !MO_UINT64_MAX */
 
 #define MO_INT8_WIDTH 8
 #define MO_INT16_WIDTH 16
@@ -137,15 +157,31 @@ typedef unsigned long long MO_UINT64, *PMO_UINT64;
 #define MO_UINT32_WIDTH 32
 #define MO_UINT64_WIDTH 64
 
+#ifndef MO_INT8_C
 #define MO_INT8_C(Value) (Value)
+#endif /* !MO_INT8_C */
+#ifndef MO_INT16_C
 #define MO_INT16_C(Value) (Value)
+#endif /* !MO_INT16_C */
+#ifndef MO_INT32_C
 #define MO_INT32_C(Value) (Value)
+#endif /* !MO_INT32_C */
+#ifndef MO_INT64_C
 #define MO_INT64_C(Value) (Value ## LL)
+#endif /* !MO_INT64_C */
 
+#ifndef MO_UINT8_C
 #define MO_UINT8_C(Value) (Value)
+#endif /* !MO_UINT8_C */
+#ifndef MO_UINT16_C
 #define MO_UINT16_C(Value) (Value)
+#endif /* !MO_UINT16_C */
+#ifndef MO_UINT32_C
 #define MO_UINT32_C(Value) (Value ## U)
+#endif /* !MO_UINT32_C */
+#ifndef MO_UINT64_C
 #define MO_UINT64_C(Value) (Value ## ULL)
+#endif /* !MO_UINT64_C */
 
 #ifndef MO_POINTER_SIZE
 #if defined(_WIN64) || defined(_LP64) || defined(__LP64__)
@@ -457,7 +493,7 @@ typedef struct _MO_GUID
 #endif
 #endif /* !MO_GET_VARIABLE_ADDRESS */
 
-#ifdef _MSC_VER /* MSVC */
+#if defined(_MSC_VER) /* MSVC */
 typedef PMO_CHAR MO_VARIABLE_ARGUMENT_LIST;
 #ifndef _MO_VARIABLE_ARGUMENT_ALIGNMENT_ADJUSTMENT
 #if defined(_M_ARM) || defined(_M_ARM_NT) || defined(_M_ARM64) || \
@@ -585,17 +621,9 @@ typedef __builtin_va_list MO_VARIABLE_ARGUMENT_LIST;
     __builtin_va_copy(Destination, Source)
 #endif
 #else /* Unknown Compilers */
-typedef MO_UINT8* MO_VARIABLE_ARGUMENT_LIST;
-#define MO_VARIABLE_ARGUMENT_START(Marker, Parameter) (Marker = \
-    ((MO_VARIABLE_ARGUMENT_LIST)MO_GET_VARIABLE_ADDRESS(Parameter)) + \
-    MO_GET_ALIGNED_SIZE(sizeof(Parameter), sizeof(MO_UINTN)))
-#define MO_VARIABLE_ARGUMENT_READ(Marker, TYPE) (*(TYPE*)( \
-    (Marker += MO_GET_ALIGNED_SIZE(sizeof(TYPE), sizeof(MO_UINTN))) - \
-    MO_GET_ALIGNED_SIZE(sizeof(TYPE), sizeof(MO_UINTN))))
-#define MO_VARIABLE_ARGUMENT_END(Marker) \
-    (Marker = (MO_VARIABLE_ARGUMENT_LIST)0)
-#define MO_VARIABLE_ARGUMENT_COPY(Destination, Source) \
-    ((MO_VOID)((Destination) = (Source)))
+#ifndef MILE_MOBILITY_UNKNOWN_COMPILER_ADAPTED
+#error "[MILE_MOBILITY_UNKNOWN_COMPILER_ADAPTED] Compiler adaptation required."
+#endif /* !MILE_MOBILITY_UNKNOWN_COMPILER_ADAPTED */
 #endif
 
 /* Defines result code type and values based on HRESULT from Windows. */
