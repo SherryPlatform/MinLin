@@ -1,0 +1,239 @@
+﻿name: Build Linux kernel with MinLin configurations
+
+on:
+  workflow_dispatch:
+    inputs:
+      kernel_version:
+        description: "Linux kernel release version, without the v prefix"
+        required: true
+        type: string
+      flavor:
+        description: "Linux kernel configuration flavor"
+        required: true
+        default: Standard (Hyper-V Generation 2 Virtual Machines)
+        type: choice
+        options:
+          - Standard (Hyper-V Generation 2 Virtual Machines)
+          - Minimal (Hyper-V Generation 2 Virtual Machines)
+          - Retrovisor (Hyper-V Generation 2 Virtual Machines)
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ inputs.flavor }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+
+    env:
+      KERNEL_VERSION: ${{ inputs.kernel_version }}
+      KBUILD_BUILD_USER: MinLin
+      KBUILD_BUILD_HOST: GitHubActions
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout configurations
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Validate inputs and resolve configuration
+        id: configuration
+        env:
+          FLAVOR_LABEL: ${{ inputs.flavor }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$KERNEL_VERSION" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+            echo "::error::Invalid kernel version: $KERNEL_VERSION"
+            exit 1
+          fi
+
+          case "$FLAVOR_LABEL" in
+            "Standard (Hyper-V Generation 2 Virtual Machines)")
+              flavor="HvGen2.Standard"
+              ;;
+            "Minimal (Hyper-V Generation 2 Virtual Machines)")
+              flavor="HvGen2.Minimal"
+              ;;
+            "Retrovisor (Hyper-V Generation 2 Virtual Machines)")
+              flavor="HvGen2.Retrovisor"
+              ;;
+            *)
+              echo "::error::Unsupported configuration: $FLAVOR_LABEL"
+              exit 1
+              ;;
+          esac
+
+          config="$GITHUB_WORKSPACE/Sources/MinLin.Kernel.Configurations/MinLin.Kernel.${flavor}.config"
+
+          if [[ ! -f "$config" ]]; then
+            echo "::error::Configuration not found: $config"
+            exit 1
+          fi
+
+          {
+            echo "FLAVOR=$flavor"
+            echo "KERNEL_CONFIG=$config"
+          } >> "$GITHUB_ENV"
+
+          echo "flavor=$flavor" >> "$GITHUB_OUTPUT"
+
+      - name: Install build dependencies
+        run: |
+          set -euo pipefail
+
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential \
+            flex \
+            bison \
+            dwarves \
+            libssl-dev \
+            libelf-dev \
+            cpio \
+            libncurses-dev \
+            bc \
+            curl \
+            ca-certificates \
+            openssl \
+            xz-utils \
+            zstd \
+            kmod
+
+      - name: Download Linux kernel source
+        run: |
+          set -euo pipefail
+
+          download_dir="$RUNNER_TEMP/kernel-download"
+          source_dir="$RUNNER_TEMP/linux"
+          archive="linux-${KERNEL_VERSION}.tar.xz"
+          major="${KERNEL_VERSION%%.*}"
+          base_url="https://cdn.kernel.org/pub/linux/kernel/v${major}.x"
+
+          mkdir -p "$download_dir" "$source_dir"
+          cd "$download_dir"
+
+          curl --fail --location --retry 3 \
+            --output "$archive" \
+            "${base_url}/${archive}"
+
+          curl --fail --location --retry 3 \
+            --output sha256sums.asc \
+            "${base_url}/sha256sums.asc"
+
+          # Check the archive against the upstream checksum list.
+          awk -v archive="$archive" \
+            '$2 == archive { print $1 "  " $2 }' \
+            sha256sums.asc > SHA256SUMS
+
+          if [[ ! -s SHA256SUMS ]]; then
+            echo "::error::No SHA-256 checksum found for $archive"
+            exit 1
+          fi
+
+          sha256sum --check SHA256SUMS
+
+          tar -xJf "$archive" \
+            -C "$source_dir" \
+            --strip-components=1
+
+      - name: Generate kernel configuration
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/linux"
+
+          make \
+            ARCH=x86 \
+            KCONFIG_ALLCONFIG="$KERNEL_CONFIG" \
+            allnoconfig
+
+          # ARCH=x86 alone does not guarantee a 64-bit kernel.
+          if ! grep -qx 'CONFIG_X86_64=y' .config; then
+            echo "::error::The generated configuration is not x86_64. Check CONFIG_64BIT in the configuration fragment."
+            exit 1
+          fi
+
+      - name: Build kernel and modules
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/linux"
+
+          targets=(bzImage)
+
+          if grep -qx 'CONFIG_MODULES=y' .config; then
+            targets+=(modules)
+          fi
+
+          make \
+            ARCH=x86 \
+            -j"$(nproc)" \
+            "${targets[@]}"
+
+      - name: Package build outputs
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/linux"
+
+          release="$(make -s ARCH=x86 kernelrelease)"
+          output_dir="$GITHUB_WORKSPACE/artifacts"
+          modules_root="$RUNNER_TEMP/modules-root"
+
+          mkdir -p "$output_dir"
+
+          cp arch/x86/boot/bzImage "$output_dir/vmlinuz-${release}"
+          cp .config "$output_dir/config-${release}"
+          cp System.map "$output_dir/System.map-${release}"
+
+          printf '%s\n' "$release" > "$output_dir/kernelrelease.txt"
+
+          {
+            printf 'kernel_version=%s\n' "$KERNEL_VERSION"
+            printf 'kernel_release=%s\n' "$release"
+            printf 'flavor=%s\n' "$FLAVOR"
+            printf 'configuration_commit=%s\n' "$GITHUB_SHA"
+            printf 'gcc_version=%s\n' "$(gcc -dumpfullversion)"
+          } > "$output_dir/build-info.txt"
+
+          if grep -qx 'CONFIG_MODULES=y' .config; then
+            make \
+              ARCH=x86 \
+              INSTALL_MOD_PATH="$modules_root" \
+              modules_install
+
+            module_dir="$modules_root/lib/modules/$release"
+
+            # Exclude links to the temporary CI source and build directories.
+            rm -f "$module_dir/build" "$module_dir/source"
+
+            depmod -b "$modules_root" "$release"
+
+            # Preserve permissions, symbolic links, and the lib/modules layout.
+            tar -C "$modules_root" \
+              -czf "$output_dir/modules-${release}.tar.gz" \
+              lib
+          else
+            printf '%s\n' \
+              'CONFIG_MODULES is disabled; no loadable module archive was generated.' \
+              > "$output_dir/modules-disabled.txt"
+          fi
+
+          cd "$output_dir"
+
+          find . -maxdepth 1 -type f ! -name SHA256SUMS -print0 \
+            | sort -z \
+            | xargs -0 sha256sum \
+            > SHA256SUMS
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: MinLin.Kernel.${{ steps.configuration.outputs.flavor }}-${{ inputs.kernel_version }}-${{ github.run_number }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
