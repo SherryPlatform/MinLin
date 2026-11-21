@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Checkout configurations
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -230,7 +230,7 @@ jobs:
             > SHA256SUMS
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: MinLin.Kernel.${{ steps.configuration.outputs.flavor }}-${{ inputs.kernel_version }}-${{ github.run_number }}
           path: artifacts/
