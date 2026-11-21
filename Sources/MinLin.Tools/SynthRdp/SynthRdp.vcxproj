@@ -37,11 +37,13 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SpBase.c" />
     <ClCompile Include="SynthRdp.cpp" />
     <ClCompile Include="VmbusPipe.cpp" />
     <ClCompile Include="VmbusUio.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SpBase.h" />
     <ClInclude Include="VmbusPipe.h" />
     <ClInclude Include="VmbusUio.h" />
   </ItemGroup>
