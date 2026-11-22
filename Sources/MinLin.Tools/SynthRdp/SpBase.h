@@ -34,4 +34,28 @@ MO_EXTERN_C MO_POINTER MOAPI SpAllocateMemory(
 MO_EXTERN_C MO_VOID MOAPI SpFreeMemory(
     _Mo_In_Opt_ MO_POINTER Block);
 
+/**
+ * @brief Write formatted data to a onebyte or multibyte string, suggested
+ *        encoding with UTF-8.
+ * @param Format Format-control string.
+ * @param ArgList Pointer to list of optional arguments to be formatted.
+ * @return A formatted string to be freed with SpFreeMemory, or MO_NULL on
+ *         failure or an empty result.
+*/
+MO_STRING SpVFormatString(
+    _Mo_In_ MO_CHAR MO_CONST* MO_CONST Format,
+    _Mo_In_ MO_VARIABLE_ARGUMENT_LIST ArgList);
+
+/**
+ * @brief Write formatted data to a onebyte or multibyte string, suggested
+ *        encoding with UTF-8.
+ * @param Format Format-control string.
+ * @param ... Optional arguments to be formatted.
+ * @return A formatted string to be freed with SpFreeMemory, or MO_NULL on
+ *         failure or an empty result.
+*/
+MO_STRING SpFormatString(
+    _Mo_In_ MO_CHAR MO_CONST* MO_CONST Format,
+    ...);
+
 #endif // !SP_BASE
