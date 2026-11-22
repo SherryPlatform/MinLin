@@ -58,4 +58,28 @@ MO_STRING SpFormatString(
     _Mo_In_ MO_CHAR MO_CONST* MO_CONST Format,
     ...);
 
+/**
+ * @brief Converts from the onebyte or multibyte string, suggested encoding with
+ *        UTF-8, to the Int64 integer.
+ * @param Source The onebyte or multibyte string.
+ * @param Radix The number base to use.
+ * @return The converted Int64 integer value.
+ * @remark For more information, see strtoll.
+ */
+MO_INT64 SpToInt64(
+    _Mo_In_ MO_CONSTANT_STRING Source,
+    _Mo_In_ MO_UINT8 Radix);
+
+/**
+ * @brief Converts from the onebyte or multibyte string, suggested encoding with
+ *        UTF-8, to the UInt64 integer.
+ * @param Source The onebyte or multibyte string.
+ * @param Radix The number base to use.
+ * @return The converted UInt64 integer value.
+ * @remark For more information, see strtoull.
+ */
+MO_UINT64 SpToUInt64(
+    _Mo_In_ MO_CONSTANT_STRING Source,
+    _Mo_In_ MO_UINT8 Radix);
+
 #endif // !SP_BASE

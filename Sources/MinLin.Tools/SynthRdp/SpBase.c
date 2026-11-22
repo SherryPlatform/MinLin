@@ -94,3 +94,17 @@ MO_STRING SpFormatString(
     MO_VARIABLE_ARGUMENT_END(ArgList);
     return Result;
 }
+
+MO_INT64 SpToInt64(
+    _Mo_In_ MO_CONSTANT_STRING Source,
+    _Mo_In_ MO_UINT8 Radix)
+{
+    return strtoll(Source, MO_NULL, Radix);
+}
+
+MO_UINT64 SpToUInt64(
+    _Mo_In_ MO_CONSTANT_STRING Source,
+    _Mo_In_ MO_UINT8 Radix)
+{
+    return strtoull(Source, MO_NULL, Radix);
+}
