@@ -20,13 +20,13 @@ MO_EXTERN_C MO_POINTER MOAPI SpAllocateMemory(
 {
     if (!Size)
     {
-        return MO_NULL;
+        return nullptr;
     }
 
     MO_POINTER Block = malloc(Size);
     if (!Block)
     {
-        return MO_NULL;
+        return nullptr;
     }
 
     memset(Block, 0, Size);
@@ -49,7 +49,7 @@ MO_STRING SpVFormatString(
     {
         MO_VARIABLE_ARGUMENT_LIST CurrentArgList;
         MO_VARIABLE_ARGUMENT_COPY(CurrentArgList, ArgList);
-        Length = vsnprintf(MO_NULL, 0, Format, CurrentArgList);
+        Length = vsnprintf(nullptr, 0, Format, CurrentArgList);
         MO_VARIABLE_ARGUMENT_END(CurrentArgList);
     }
     if (Length > 0)
@@ -80,8 +80,8 @@ MO_STRING SpVFormatString(
         }
     }
 
-    // Return MO_NULL on failure or an empty result.
-    return MO_NULL;
+    // Return nullptr on failure or an empty result.
+    return nullptr;
 }
 
 MO_STRING SpFormatString(
@@ -99,12 +99,12 @@ MO_INT64 SpToInt64(
     _Mo_In_ MO_CONSTANT_STRING Source,
     _Mo_In_ MO_UINT8 Radix)
 {
-    return strtoll(Source, MO_NULL, Radix);
+    return strtoll(Source, nullptr, Radix);
 }
 
 MO_UINT64 SpToUInt64(
     _Mo_In_ MO_CONSTANT_STRING Source,
     _Mo_In_ MO_UINT8 Radix)
 {
-    return strtoull(Source, MO_NULL, Radix);
+    return strtoull(Source, nullptr, Radix);
 }

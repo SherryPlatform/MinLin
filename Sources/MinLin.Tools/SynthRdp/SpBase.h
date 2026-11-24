@@ -39,7 +39,7 @@ MO_EXTERN_C MO_VOID MOAPI SpFreeMemory(
  *        encoding with UTF-8.
  * @param Format Format-control string.
  * @param ArgList Pointer to list of optional arguments to be formatted.
- * @return A formatted string to be freed with SpFreeMemory, or MO_NULL on
+ * @return A formatted string to be freed with SpFreeMemory, or nullptr on
  *         failure or an empty result.
 */
 MO_STRING SpVFormatString(
@@ -51,7 +51,7 @@ MO_STRING SpVFormatString(
  *        encoding with UTF-8.
  * @param Format Format-control string.
  * @param ... Optional arguments to be formatted.
- * @return A formatted string to be freed with SpFreeMemory, or MO_NULL on
+ * @return A formatted string to be freed with SpFreeMemory, or nullptr on
  *         failure or an empty result.
 */
 MO_STRING SpFormatString(
