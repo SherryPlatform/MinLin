@@ -219,8 +219,8 @@ MO_EXTERN_C MO_POINTER MOAPI MoMileInterlockedExchangePointer(
 #elif defined(__GNUC__) || defined(__clang__) /* GCC and Clang */
     MO_POINTER OldValue = __sync_val_compare_and_swap(
         Target,
-        MO_NULL,
-        MO_NULL);
+        nullptr,
+        nullptr);
     for (;;)
     {
         MO_POINTER ActualValue = __sync_val_compare_and_swap(
